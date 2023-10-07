@@ -1,12 +1,10 @@
 <script setup>
-    import assignment from './assignment/assignment.vue'
+    // import assignment from './assignment/assignment.vue'
+
+    import Sidebar from './components/Sidebar.vue'
 </script>
 
 <template>
-    <!-- ASSIGNMENT - PRACTICE -->
-    <!-- NOT INCLUDED IN MACRO TOOL APP -->
-    <assignment />
-
     <!-- MAIN -->
-
+    <Sidebar />
 </template>
