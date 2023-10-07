@@ -6,6 +6,7 @@
     box-sizing: border-box;
     font-family: 'Poppins', Helvetica, sans-serif;
 }
+
 :root {
     --primary-color: #699FF8;
     --primary-text-color: #ffffff;

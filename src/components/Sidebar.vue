@@ -1,32 +1,35 @@
 <script setup>
-    import { faHouse, faMessage, faUserPlus, faUserPen, faClipboardList, faGraduationCap, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
+    import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
 
     const sidebar = [
         { 
-            category: 'CATEGORY 1',
+            category: 'CONVERSION',
             links: ['Tool 1', 'Tool 2'],
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         }, 
         { 
-            category: 'CATEGORY 2', 
+            category: 'FLEXBOX', 
             links: ['Tool 3', 'Tool 4'], 
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         },
         { 
-            category: 'CATEGORY 3', 
+            category: 'GENERATOR', 
             links: ['Tool 5', 'Tool 6'], 
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         }
     ]
 
-    const linkLists = [
-        'Tool 1',
-        'Tool 2',
-        'Tool 3',
-        'Tool 4',
-        'Tool 5',
-        'Tool 6'
-    ]
+    const getLinkLists = () => {
+        let linkLists = []
+
+        sidebar.forEach(link => {
+            for(let i = 0; i < link.links.length; i++) {
+                linkLists.push(link.links[i])
+            }
+        })
+
+        return linkLists
+    }
    
     const getLinkURL = (link) => {
         return '#' + link.toLowerCase().split(' ').join('-')
@@ -41,10 +44,10 @@
 <template>
     <aside class="side-bar vh-100 position-relative">
         <!-- SIDEBAR HEADER -->
-        <h6 class="logo-header d-flex align-items-center px-4 text-light fs-6 fw-bold">
+        <div class="logo-header d-flex align-items-center px-4">
             <img src="/img/tool-logo.png" alt="">
-            MACRO TOOLS
-        </h6>
+            <h5 class="fs-6 m-0">MICRO TOOLS</h5>
+        </div>
 
         <!-- SIDEBAR LINKS -->
         <div class="nav flex-column nav-pills my-4 px-1"
@@ -57,14 +60,14 @@
                 <li v-for="(link, linkIndex) in section.links" :key="linkIndex" class="nav-item" role="presentation">
                     <a :href="getLinkURL(link)"
                         class="nav-link"
-                        :class="{ 'active': link == 'Tool 1' }"
+                        :class="{ 'active': link == getLinkLists()[0] }"
                         :id="`${getLink(link)}-link`"
                         data-bs-toggle="pill"
                         :data-bs-target="getLinkURL(link)"
                         role="tab"
                         type="button"
                         :aria-controls="getLink(link)"
-                        :aria-selected="link == 'Home' ? true : false"
+                        :aria-selected="link == getLinkLists()[0] ? true : false"
                     >
                         <font-awesome-icon :icon="section.icon[linkIndex]" />
                         {{ link }}
@@ -77,7 +80,7 @@
     <!-- PAGE CONTENT -->
     <main class="tab-content" id="main-body">
         <section
-            v-for="(link, linkIndex) in linkLists"
+            v-for="(link, linkIndex) in getLinkLists()"
             class="tab-pane fade"
             :class="{ 'show active': linkIndex == 0 }"
             :id="getLink(link)"
@@ -122,6 +125,11 @@
         border-radius: 50%;
         border: 2px solid var(--primary-text-color);
         background-color: var(--secondary-text-color);
+    }
+    .logo-header h5 {
+        font-weight: 600 !important;
+        color: var(--primary-text-color);
+        letter-spacing: 0.5px;
     }
     .side-bar {
         background-color: var(--sidebar-background-color);
