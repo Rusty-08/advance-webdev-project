@@ -4,17 +4,17 @@
     const sidebar = [
         { 
             category: 'CONVERSION',
-            links: ['Tool 1', 'Tool 2'],
+            links: ['Tool One', 'Tool Two'],
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         }, 
         { 
             category: 'FLEXBOX', 
-            links: ['Tool 3', 'Tool 4'], 
+            links: ['Tool Three', 'Tool Four'], 
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         },
         { 
             category: 'GENERATOR', 
-            links: ['Tool 5', 'Tool 6'], 
+            links: ['Tool Five', 'Tool Six'], 
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         }
     ]
@@ -30,10 +30,6 @@
 
         return linkLists
     }
-   
-    const getLinkURL = (link) => {
-        return '#' + link.toLowerCase().split(' ').join('-')
-    }
 
     const getLink = (link) => {
         return link.toLowerCase().split(' ').join('-')
@@ -42,7 +38,7 @@
 </script>
 
 <template>
-    <aside class="side-bar vh-100 position-relative">
+    <aside class="side-bar vh-100">
         <!-- SIDEBAR HEADER -->
         <div class="logo-header d-flex align-items-center px-4">
             <img src="/img/tool-logo.png" alt="">
@@ -58,12 +54,12 @@
             <ul v-for="(section, index) in sidebar" class="navbar-nav w-100 px-2" :key="index">
                 <span class="nav-link-header">{{ section.category }}</span>
                 <li v-for="(link, linkIndex) in section.links" :key="linkIndex" class="nav-item" role="presentation">
-                    <a :href="getLinkURL(link)"
+                    <a :href="`#${getLink(link)}`"
                         class="nav-link"
                         :class="{ 'active': link == getLinkLists()[0] }"
                         :id="`${getLink(link)}-link`"
                         data-bs-toggle="pill"
-                        :data-bs-target="getLinkURL(link)"
+                        :data-bs-target="`#${getLink(link)}`"
                         role="tab"
                         type="button"
                         :aria-controls="getLink(link)"
@@ -76,25 +72,6 @@
             </ul>
         </div>
     </aside>
-
-    <!-- PAGE CONTENT -->
-    <main class="tab-content" id="main-body">
-        <section
-            v-for="(link, linkIndex) in getLinkLists()"
-            class="tab-pane fade"
-            :class="{ 'show active': linkIndex == 0 }"
-            :id="getLink(link)"
-            role="tabpanel"
-            :aria-labelledby="`${getLink(link)}-link`"
-            tabindex="0"
-        >
-            <div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
-                <h1 class="fw-medium fs-5 m-0">{{ `${link} Page` }} </h1>   
-            </div>
-        </section>
-        
-    </main>
-
 </template>
 
 <style setup>
