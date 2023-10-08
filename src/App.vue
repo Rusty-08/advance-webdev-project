@@ -1,8 +1,11 @@
 <script setup>
     import Sidebar from './components/Sidebar.vue'
     
-    import ToolOne from './components/ToolOne.vue';
-    import ToolTwo from './components/ToolTwo.vue';
+    // COLOR CONVERSION PAGE
+    import HexToRgba from './components/HexToRgba.vue';
+    import RgbaToHex from './components/RgbaToHex.vue';
+    
+
     import ToolThree from './components/ToolThree.vue';
     import ToolFour from './components/ToolFour.vue';
     import ToolFive from './components/ToolFive.vue';
@@ -14,9 +17,9 @@
     <!-- PAGE CONTENT -->
     <main class="tab-content" id="main-body">
         <!-- TABPANE 1 -->
-        <ToolOne />
+        <HexToRgba />
         <!-- TABPANE 2 -->
-        <ToolTwo />
+        <RgbaToHex />
         <!-- TABPANE 3 -->
         <ToolThree />
         <!-- TABPANE 4 -->
@@ -27,3 +30,11 @@
         <ToolSix />
     </main>
 </template>
+
+<style setup>
+    .tab-content section {
+        width: calc(100% - var(--sidebar-width));
+        min-height: 100vh !important;
+        margin-left: var(--sidebar-width);
+    }
+</style>

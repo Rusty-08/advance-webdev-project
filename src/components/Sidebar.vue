@@ -3,8 +3,8 @@
 
     const sidebar = [
         { 
-            category: 'CONVERSION',
-            links: ['Tool One', 'Tool Two'],
+            category: 'COLOR CONVERSION',
+            links: ['Hex to RGBA', 'RGBA to Hex'],
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         }, 
         { 
@@ -39,6 +39,7 @@
 
 <template>
     <aside class="side-bar vh-100">
+
         <!-- SIDEBAR HEADER -->
         <div class="logo-header d-flex align-items-center px-4">
             <img src="/img/tool-logo.png" alt="">
@@ -143,13 +144,5 @@
     .nav-link.active {
         color: var(--primary-text-color) !important;
         background-color: var(--active-link-background-color) !important;
-    }
-    .tab-content section {
-        width: calc(100% - var(--sidebar-width));
-        min-height: 100vh !important;
-        margin-left: var(--sidebar-width);
-    }
-    .tab-content section h1 {
-        color: var(--secondary-text-color);
     }
 </style>
