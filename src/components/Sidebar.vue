@@ -3,7 +3,7 @@
 
     const sidebar = [
         { 
-            category: 'COLOR CONVERSION',
+            category: 'CONVERSION',
             links: ['Hex to RGBA', 'RGBA to Hex'],
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         }, 
