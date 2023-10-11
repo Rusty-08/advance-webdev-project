@@ -4,8 +4,8 @@
     const sidebar = [
         { 
             category: 'CONVERSION',
-            links: ['Hex to RGBA', 'RGBA to Hex'],
-            icon: [faScrewdriverWrench, faScrewdriverWrench] 
+            links: ['Hex to RGBA', 'RGBA to Hex' , 'Voice to Text','Text to Voice'],
+            icon: [faScrewdriverWrench, faScrewdriverWrench, faScrewdriverWrench, faScrewdriverWrench] 
         }, 
         { 
             category: 'FLEXBOX', 

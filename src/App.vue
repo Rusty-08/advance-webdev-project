@@ -1,9 +1,11 @@
 <script setup>
-    import Sidebar from './components/Sidebar.vue'
+    import Sidebar from './components/Sidebar.vue';
     
     // COLOR CONVERSION PAGE
     import HexToRgba from './components/HexToRgba.vue';
     import RgbaToHex from './components/RgbaToHex.vue';
+    import VoiceToText from './components/VoiceToText.vue';
+    import TextToVoice from './components/TextToVoice.vue';
     
 
     import ToolThree from './components/ToolThree.vue';
@@ -20,6 +22,10 @@
         <HexToRgba />
         <!-- TABPANE 2 -->
         <RgbaToHex />
+         <!-- TABPANE 1 -->
+         <TextToVoice />
+        <!-- TABPANE 2 -->
+        <VoiceToText />
         <!-- TABPANE 3 -->
         <ToolThree />
         <!-- TABPANE 4 -->
