@@ -1,15 +1,18 @@
 <script setup>
+import { faCheck, faClipboard, faDroplet, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { ref, watch } from 'vue'
 
 let hex = ref('#4b5369')
 let rgb = ref('')
 let rgba = ref('')
+let isRgbCopied = ref(false)
+let isRgbaCopied = ref(false)
 
 const updateColorValues = () => {
     
     let removedHash = 
         hex.value.charAt(0) != '#'
-        ? hex.value
+        ? hex.value.trim()
         : hex.value.trim().slice(1)
         
     if(removedHash.length == 3 || removedHash.length == 4) removedHash = transformHex(removedHash)
@@ -42,7 +45,7 @@ const updateColorValues = () => {
     } else {
         rgb.value = `rgb(${r}, ${g}, ${b})`
         rgba.value = 
-            a != 1 && a != 0
+            a % 1 !== 0
             ? `rgba(${r}, ${g}, ${b}, ${a.toFixed(2)})`
             : `rgba(${r}, ${g}, ${b}, ${a})`
     }
@@ -68,46 +71,90 @@ watch(() => hex.value, updateColorValues)
 
 updateColorValues()
 
-const selectText = (className) => {
-    const elements = document.querySelectorAll(`.${className}`)
+const copyRgb = (textToCopy) => {
+    navigator.clipboard.writeText(textToCopy)
+    isRgbCopied.value = !isRgbCopied.value
+    setTimeout(() => {
+        isRgbCopied.value = !isRgbCopied.value
+    }, 1000)
+}
 
-    if (elements.length > 0) {
-        const range = document.createRange()
-        range.selectNodeContents(elements[0])
-        const selection = window.getSelection()
-        selection.removeAllRanges()
-        selection.addRange(range)
-    }
+const copyRgba = (textToCopy) => {
+    navigator.clipboard.writeText(textToCopy)
+    isRgbaCopied.value = !isRgbaCopied.value
+    setTimeout(() => {
+        isRgbaCopied.value = !isRgbaCopied.value
+    }, 1000)
 };
 
 </script>
 
 <template>
     <section class="tab-pane fade show active" id="hex-to-rgba" role="tabpanel" aria-labelledby="hex-to-rgba-link" tabindex="0">
-        <div class="container-fluid vh-100 p-4 shadow-sm">
-            <div class="hex-content gap-4 card p-5 w-100 h-100 d-flex justify-content-center align-items-center">
+        <div class="container-fluid vh-100 p-4 py-3 shadow-sm">
+            <div class="hex-content gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
                 <h2 class="fs-5">Hex to RGBA Converter</h2>
                 <input
                     type="text"
                     class="hex-value form-control shadow-sm text-center fw-medium"
                     v-model="hex"
                 >
-                <p class="fs-8"><span class="fw-medium">Tip:</span> You can enter 8 character Hex code — #11223344 for transparent RGBA colors.</p>
+                <p class="fs-8 m-0"><span class="fw-medium">Tip:</span> You can enter 8 character Hex code — #11223344 for transparent RGBA colors.</p>
                 <div class="result card w-100 p-4 d-flex justify-content-center align-items-center">
-                    <h3 class="fs-6">CONVERTED</h3>
-                    <p 
-                        class="rgb mt-2 w-100 text-center fs-5 fw-medium"
-                        @click="selectText('rgb')"
-                    >
-                        {{ rgb }}
-                    </p>
-                    <p 
-                        class="rgba w-100 text-center fs-5 pb-3 border-bottom fw-medium"
-                        @click="selectText('rgba')"
-                    >
-                        {{ rgba }}
-                    </p>
-                    <h3 class="fs-6 mt-1">PREVIEW</h3>
+                    <div class="rgb-result w-50 d-flex flex-column">
+                        <h3 class="fs-6 text-center mb-3">CONVERTED</h3>
+                        <div class="rgb-wrapper d-flex w-100 px-3 rounded-3 justify-content-between align-items-center">
+                            <p
+                                class="rgb mb-0 w-100 px-2 text-start fs-5 fw-medium"
+                            >
+                                <font-awesome-icon :icon="faDroplet" class="fs-6" />
+                                {{ rgb }}
+                            </p>
+                            <button 
+                                type="button" 
+                                class="copy-result btn"
+                                @click="copyRgb(rgb)"
+                                v-show="rgb !== 'Invalid Input'"
+                            >
+                                <font-awesome-icon 
+                                    :icon="faClipboard"
+                                    class="fs-5 text-center p-0 m-0 opacity-50" 
+                                    v-if="isRgbCopied == false"
+                                />
+                                <font-awesome-icon 
+                                    :icon="faCheck" 
+                                    class="check-icon fs-5 text-center p-0 m-0 opacity-50" 
+                                    v-else
+                                />
+                            </button>
+                        </div>
+                        <div class="rgb-wrapper mt-3 d-flex w-100 px-3 mb-3 rounded-3 justify-content-between align-items-center">
+                            <p 
+                                class="rgba mb-0 w-100 px-2 text-start fs-5 fw-medium"
+                            >  
+                                <font-awesome-icon :icon="faDroplet" class="fs-6" />
+                                {{ rgba }}
+                            </p>
+                            <button 
+                                type="button" 
+                                class="copy-result btn"
+                                @click="copyRgba(rgba)"
+                                v-show="rgba !== 'Invalid Input'"
+                            >
+                                <font-awesome-icon 
+                                    :icon="faClipboard"
+                                    class="fs-5 text-center p-0 m-0 opacity-50" 
+                                    v-if="isRgbaCopied == false"
+                                />
+                                <font-awesome-icon 
+                                    :icon="faCheck" 
+                                    class="check-icon fs-5 text-center p-0 m-0 opacity-50" 
+                                    v-else
+                                />
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="fs-6 pt-3 border-top w-100 text-center">PREVIEW</h3>
                     <div :style="{ backgroundColor: rgba != 'Invalid Input' ? rgba : transparent }" class="color-preview card mt-2 shadow-sm"></div>
                 </div>
             </div>
@@ -151,4 +198,28 @@ const selectText = (className) => {
         height: 5rem;
         border-color: transparent;
     }
+    .rgb-wrapper {
+        background-color: var(--background-color) !important;
+        height: 4rem;
+    }
+    .rgb-wrapper svg {
+        color: var(--secondary-text-color);
+        margin-right: 0.2rem;
+        width: 1rem;
+    }
+    .copy-result {
+        transition: var(--transition-175s);
+    }
+    .copy-result:hover,
+    .copy-result:active {
+        background-color: rgba(137, 146, 168, 0.1) !important;
+        border-color: transparent !important;
+    }
+    .copy-result:active {
+        background-color: rgba(137, 146, 168, 0.2) !important;
+    }
+    .copy-result .check-icon {
+        color: var(--active-link-background-color);
+    }
+
 </style>

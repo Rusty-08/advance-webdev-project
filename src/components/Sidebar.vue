@@ -1,10 +1,10 @@
 <script setup>
-    import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
+    import { faPalette, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
 
     const sidebar = [
         { 
             category: 'CONVERSION',
-            links: ['Hex to RGBA', 'RGBA to Hex' , 'Voice to Text','Text to Voice'],
+            links: ['Hex to RGBA', 'RGBA to Hex' , 'Voice to Text', 'Text to Voice'],
             icon: [faScrewdriverWrench, faScrewdriverWrench, faScrewdriverWrench, faScrewdriverWrench] 
         }, 
         { 
@@ -47,29 +47,31 @@
         </div>
 
         <!-- SIDEBAR LINKS -->
-        <div class="nav flex-column nav-pills my-4 px-1"
+        <div class="nav flex-column nav-pills px-1"
             id="pills-tab"
             role="tablist"
             aria-orientation="vertical"
         >
-            <ul v-for="(section, index) in sidebar" class="navbar-nav w-100 px-2" :key="index">
-                <span class="nav-link-header">{{ section.category }}</span>
-                <li v-for="(link, linkIndex) in section.links" :key="linkIndex" class="nav-item" role="presentation">
-                    <a :href="`#${getLink(link)}`"
-                        class="nav-link"
-                        :class="{ 'active': link == getLinkLists()[0] }"
-                        :id="`${getLink(link)}-link`"
-                        data-bs-toggle="pill"
-                        :data-bs-target="`#${getLink(link)}`"
-                        role="tab"
-                        type="button"
-                        :aria-controls="getLink(link)"
-                        :aria-selected="link == getLinkLists()[0] ? true : false"
-                    >
-                        <font-awesome-icon :icon="section.icon[linkIndex]" />
-                        {{ link }}
-                    </a>
-                </li>
+            <ul class="navbar-nav w-100 px-2">
+                <template v-for="section in sidebar">
+                    <span class="nav-link-header">{{ section.category }}</span>
+                    <li v-for="(link, linkIndex) in section.links" :key="linkIndex" class="nav-item" role="presentation">
+                        <a :href="`#${getLink(link)}`"
+                            class="nav-link"
+                            :class="{ 'active': link == getLinkLists()[0] }"
+                            :id="`${getLink(link)}-link`"
+                            data-bs-toggle="pill"
+                            :data-bs-target="`#${getLink(link)}`"
+                            role="tab"
+                            type="button"
+                            :aria-controls="getLink(link)"
+                            :aria-selected="link == getLinkLists()[0] ? true : false"
+                        >
+                            <font-awesome-icon :icon="section.icon[linkIndex]" />
+                            {{ link }}
+                        </a>
+                    </li>
+                </template>
             </ul>
         </div>
     </aside>
@@ -119,9 +121,6 @@
         font-size: 12.35px !important;
         font-weight: 600;
         padding: 1.5rem 0 0.7rem 0.8rem !important;
-    }
-    .navbar-nav:first-child .nav-link-header {
-        padding-top: 0 !important;
     }
     .nav-item {
         padding: 0.15rem 0 !important;

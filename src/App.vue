@@ -7,11 +7,10 @@
     import VoiceToText from './components/VoiceToText.vue';
     import TextToVoice from './components/TextToVoice.vue';
     
-
-    import ToolThree from './components/ToolThree.vue';
-    import ToolFour from './components/ToolFour.vue';
-    import ToolFive from './components/ToolFive.vue';
-    import ToolSix from './components/ToolSix.vue';
+    import ToolThree from './components/ToolThree.vue'
+    import ToolFour from './components/ToolFour.vue'
+    import ToolFive from './components/ToolFive.vue'
+    import ToolSix from './components/ToolSix.vue'
 </script>
 
 <template>
