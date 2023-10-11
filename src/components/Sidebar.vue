@@ -1,11 +1,11 @@
 <script setup>
-    import { faPalette, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
+    import { faBrush, faFileInvoice, faFillDrip, faMicrophoneLines, faPalette, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
 
     const sidebar = [
         { 
             category: 'CONVERSION',
             links: ['Hex to RGBA', 'RGBA to Hex' , 'Voice to Text', 'Text to Voice'],
-            icon: [faScrewdriverWrench, faScrewdriverWrench, faScrewdriverWrench, faScrewdriverWrench] 
+            icon: [faFillDrip, faBrush, faMicrophoneLines, faFileInvoice] 
         }, 
         { 
             category: 'FLEXBOX', 

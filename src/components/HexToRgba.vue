@@ -1,5 +1,5 @@
 <script setup>
-import { faCheck, faClipboard, faDroplet, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faClipboard, faDroplet, faLocationCrosshairs, faFill } from '@fortawesome/free-solid-svg-icons';
 import { ref, watch } from 'vue'
 
 let hex = ref('#4b5369')
@@ -107,7 +107,7 @@ const copyRgba = (textToCopy) => {
                             <p
                                 class="rgb mb-0 w-100 px-2 text-start fs-5 fw-medium"
                             >
-                                <font-awesome-icon :icon="faDroplet" class="fs-6" />
+                                <font-awesome-icon :icon="faFill" class="fs-5 px-1" />
                                 {{ rgb }}
                             </p>
                             <button 
@@ -132,7 +132,7 @@ const copyRgba = (textToCopy) => {
                             <p 
                                 class="rgba mb-0 w-100 px-2 text-start fs-5 fw-medium"
                             >  
-                                <font-awesome-icon :icon="faDroplet" class="fs-6" />
+                                <font-awesome-icon :icon="faFill" class="fs-5 px-1" />
                                 {{ rgba }}
                             </p>
                             <button 
@@ -148,7 +148,7 @@ const copyRgba = (textToCopy) => {
                                 />
                                 <font-awesome-icon 
                                     :icon="faCheck" 
-                                    class="check-icon fs-5 text-center p-0 m-0 opacity-50" 
+                                    class="check-icon fs-5 text-center p-0 m-0" 
                                     v-else
                                 />
                             </button>
@@ -176,8 +176,8 @@ const copyRgba = (textToCopy) => {
         color: var(--tertiary-text-color);
     }
     .hex-content input:focus {
-        color: var(--dark-text-color);
-        border-color: var(--dark-text-color);
+        color: var(--dark-text-color) !important;
+        border-color: var(--dark-text-color) !important;
     }
     .hex-content p,
     .result h3 {
@@ -205,7 +205,6 @@ const copyRgba = (textToCopy) => {
     .rgb-wrapper svg {
         color: var(--secondary-text-color);
         margin-right: 0.2rem;
-        width: 1rem;
     }
     .copy-result {
         transition: var(--transition-175s);

@@ -56,7 +56,7 @@
 		} else {
 			sr.start()
 		}
-	}
+	};
 </script>
 
 <template>
