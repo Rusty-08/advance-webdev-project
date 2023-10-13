@@ -92,14 +92,14 @@ const copyRgba = (textToCopy) => {
 <template>
     <section class="tab-pane fade show active" id="hex-to-rgba" role="tabpanel" aria-labelledby="hex-to-rgba-link" tabindex="0">
         <div class="container-fluid vh-100 p-4 py-3 shadow-sm">
-            <div class="hex-content gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
+            <div class="page-content gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
                 <h2 class="fs-5">Hex to RGBA Converter</h2>
                 <input
                     type="text"
                     class="hex-value form-control shadow-sm text-center fw-medium"
                     v-model="hex"
                 >
-                <p class="fs-8 m-0"><span class="fw-medium">Tip:</span> You can enter 8 character Hex code — #11223344 for transparent RGBA colors.</p>
+                <p class="fs-8 m-0"><span class="fw-medium">Tip:</span> You can enter 8 character Hex code — #11223344 for transparency.</p>
                 <div class="result card w-100 p-4 d-flex justify-content-center align-items-center">
                     <div class="rgb-result w-50 d-flex flex-column">
                         <h3 class="fs-6 text-center mb-3">CONVERTED</h3>
@@ -164,26 +164,27 @@ const copyRgba = (textToCopy) => {
 
 
 <style setup>
-    .hex-content {
+    .page-content {
         border-color: transparent;
     }
-    .hex-content h2 {
+    .page-content h2 {
         color: var(--tertiary-text-color);
     }
-    .hex-content input {
+    .page-content input {
         width: 10rem;
         border: 2px solid var(--secondary-text-color);
         color: var(--tertiary-text-color);
     }
-    .hex-content input:focus {
+    .page-content input:focus,
+    .page-content textarea:focus {
         color: var(--dark-text-color) !important;
         border-color: var(--dark-text-color) !important;
     }
-    .hex-content p,
+    .page-content p,
     .result h3 {
         color: var(--secondary-text-color);
     }
-    .hex-content span,
+    .page-content span,
     .result p {
         color: var(--dark-text-color);;
     }

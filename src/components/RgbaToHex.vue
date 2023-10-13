@@ -58,8 +58,8 @@
 <template>
     <section class="tab-pane fade" id="rgba-to-hex" role="tabpanel" aria-labelledby="rgba-to-hex-link" tabindex="0">
         <div class="container-fluid p-3 px-4 vh-100 d-flex justify-content-center align-items-center">
-            <div class="hex-content gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
-                <h2 class="fs-5">RGBA to Hex Converter</h2>
+            <div class="page-content gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
+                <h2 class="fs-5 mb-3">RGBA to Hex Converter</h2>
                 <div class="d-flex gap-4 align-items-center justify-content-center">
                     <div 
                         class="rgba-colors gap-2 d-flex align-items-center justify-content-center"
@@ -114,7 +114,7 @@
                         </div>
                         <h3 class="fs-6 pt-3 border-top w-100 text-center">PREVIEW</h3>
                         <div 
-                            :style="{ backgroundColor: rgbaValue }" 
+                            :style="{ backgroundColor: rgbaValue }"
                             class="color-preview card mt-2 shadow-sm">
                         </div>
                     </div>
