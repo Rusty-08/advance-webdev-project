@@ -2,7 +2,7 @@
 	import { faRotateLeft, faCheck, faCopy, faMicrophone, faStop, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
     import { ref, onMounted } from 'vue'
 
-	let transcript = ref('Lorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sit')
+	let transcript = ref('')
 	let isRecording = ref(false)
 	let isTextCopied = ref(false)
 
@@ -69,9 +69,13 @@
 
 	const clearBoard = () => {
 		transcript.value = ''
+		sr.stop()
+		setTimeout(() => {
+			sr.start()
+		}, 1000)
 	};
 
-</script> text-center
+</script>
 
 <template>
     <section class="tab-pane fade" id="voice-to-text" role="tabpanel" aria-labelledby="voice-to-text-link" tabindex="0">
@@ -86,8 +90,9 @@
 					<font-awesome-icon v-if="!isRecording" :icon="faMicrophone" class="start-icon text-center fs-3 px-1" />
 					<font-awesome-icon v-else :icon="faStop" class="stop-icon fs-3 text-center px-1" />
 				</button>
-				<p v-if="!isRecording" class="fs-7">Start Recording</p>
-				<p v-else class="fs-7">Recording...</p>
+				<span v-if="!isRecording" class="fs-7 m-0">Start Recording</span>
+				<span v-else class="fs-7 m-0">Recording...</span>
+                <p class="fs-8 mb-4"><span class="fw-medium">Note:</span> You can only record in English Language</p>
 				<div class="text-output position-relative card h-50 text-start w-75 shadow-sm p-4" rows="10" readonly>
 					<span class="recorded-text">{{ transcript }}</span>
 					<div class="command-button gap-2 d-flex align-items-center position-absolute">
@@ -153,11 +158,11 @@
 	.text-output {
 		background-color: var(--background-color);
 		border-color: var(--secondary-text-color);
-		padding-right: 0.5rem !important;
 		padding-bottom: 1rem !important;
 	}
 	.recorded-text {
 		overflow-y: scroll;
+		text-align: justify;
 	}
 	.recorded-text::-webkit-scrollbar {
         width: 6px;
