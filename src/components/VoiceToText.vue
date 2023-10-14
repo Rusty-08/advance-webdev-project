@@ -1,9 +1,10 @@
 <script setup>
-	import { faCopy, faMicrophone, faStop } from '@fortawesome/free-solid-svg-icons';
+	import { faRotateLeft, faCheck, faCopy, faMicrophone, faStop, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
     import { ref, onMounted } from 'vue'
 
-	const transcript = ref('')
-	const isRecording = ref(false)
+	let transcript = ref('Lorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sitLorem ipsum dolor sit')
+	let isRecording = ref(false)
+	let isTextCopied = ref(false)
 
 	const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition
 	const sr = new Recognition()
@@ -38,6 +39,7 @@
 
 	const CheckForCommand = (result) => {
 		const t = result[0].transcript;
+
 		if (t.includes('stop recording')) {
 			sr.stop()
 		} else if (
@@ -59,9 +61,17 @@
 
 	const copyRecordedText = (textToCopy) => {
     	navigator.clipboard.writeText(textToCopy)
+		isTextCopied.value = !isTextCopied.value
+		setTimeout(() => {
+			isTextCopied.value = !isTextCopied.value
+		}, 2000)
+	}
+
+	const clearBoard = () => {
+		transcript.value = ''
 	};
 
-</script>
+</script> text-center
 
 <template>
     <section class="tab-pane fade" id="voice-to-text" role="tabpanel" aria-labelledby="voice-to-text-link" tabindex="0">
@@ -79,15 +89,35 @@
 				<p v-if="!isRecording" class="fs-7">Start Recording</p>
 				<p v-else class="fs-7">Recording...</p>
 				<div class="text-output position-relative card h-50 text-start w-75 shadow-sm p-4" rows="10" readonly>
-					{{ transcript }}
-					<button 
-						class="copy-voice-text px-3 position-absolute btn d-flex align-items-center gap-1"
-						v-show="transcript !== ''"
-						@click="copyRecordedText(transcript)"
-					>
-						<p class="fs-8 m-0 text-light">Copy</p>
-						<font-awesome-icon :icon="faCopy" class="fs-6" />
-					</button>
+					<span class="recorded-text">{{ transcript }}</span>
+					<div class="command-button gap-2 d-flex align-items-center position-absolute">
+						<button 
+							class="btn reset-board px-4 d-flex align-items-center gap-1"
+							@click="clearBoard()"
+						>
+							<p class="fs-8 m-0">Clear</p>
+							<font-awesome-icon
+								:icon="faArrowRotateLeft"
+                    	        class="fs-6"
+                    	    />
+						</button>
+						<button 
+							class="copy-voice-text px-4 btn d-flex align-items-center justify-content-center gap-1"
+							@click="copyRecordedText(transcript)"
+						>
+							<p class="fs-8 m-0 text-light">Copy</p>
+							<font-awesome-icon 
+								:icon="faCopy"
+                    	        class="fs-6 text-center" 
+                    	        v-if="isTextCopied == false"
+                    	    />
+                    	    <font-awesome-icon 
+                    	        :icon="faCheck" 
+                    	        class="fs-6 text-center" 
+                    	        v-else
+                    	    />
+						</button>
+					</div>
 				</div>
 			</div>
         </div>
@@ -120,24 +150,60 @@
 	.stop-mode svg {
 		color: #FF8080;
 	}
-	.text-output,
-	.text-output:focus {
-		border-color: transparent;
+	.text-output {
 		background-color: var(--background-color);
+		border-color: var(--secondary-text-color);
+		padding-right: 0.5rem !important;
+		padding-bottom: 1rem !important;
 	}
-	.copy-voice-text {
+	.recorded-text {
+		overflow-y: scroll;
+	}
+	.recorded-text::-webkit-scrollbar {
+        width: 6px;
+    }
+    .recorded-text::-webkit-scrollbar-thumb {
+        background-color: transparent;
+        border-radius: 6px;
+    }
+    .recorded-text:hover::-webkit-scrollbar-thumb {
+        background-color: var(--secondary-text-color);
+    }
+	.command-button {
+		top: -1.5rem;
+		right: 1rem;
+	}
+	.command-button button p {
+		font-weight: 500;
+	}
+	.command-button button {
 		transition: var(--transition-175s);
-		top: -1rem;
-		right: 1.5rem;
 		background-color: var(--secondary-text-color);
+		height: 2.4rem;
 	}
-	.copy-voice-text,
-	.copy-voice-text:hover svg {
-		color: var(--primary-text-color) !important;
+	.command-button button,
+	.command-button button:hover svg {
+		color: var(--primary-text-color);
 	}
 	.copy-voice-text:hover,
 	.copy-voice-text:active {
-		background-color: var(--tertiary-text-color);
+		background-color: var(--tertiary-text-color) !important;
 		border-color: transparent !important;
+	}
+	.command-button button svg {
+		width: 1rem;
+	}
+	.reset-board {
+		background-color: var(--primary-text-color) !important;
+		color: var(--secondary-text-color) !important;
+		border-color: var(--secondary-text-color) !important;
+	}
+	.reset-board:hover,
+	.reset-board:active {
+		border-color: var(--tertiary-text-color) !important;
+	}
+	.reset-board:hover svg,
+	.reset-board:hover p {
+		color: var(--tertiary-text-color) !important;
 	}
 </style>
