@@ -6,8 +6,7 @@
     import RgbaToHex from './components/RgbaToHex.vue';
     import VoiceToText from './components/VoiceToText.vue';
     import TextToVoice from './components/TextToVoice.vue';
-    
-    import ToolThree from './components/ToolThree.vue'
+    import InteractiveVisualizer from './components/InteractiveVisualizer.vue'
     import ToolFour from './components/ToolFour.vue'
     import ToolFive from './components/ToolFive.vue'
     import ToolSix from './components/ToolSix.vue'
@@ -26,7 +25,7 @@
         <!-- TABPANE 2 -->
         <VoiceToText />
         <!-- TABPANE 3 -->
-        <ToolThree />
+        <InteractiveVisualizer />
         <!-- TABPANE 4 -->
         <ToolFour />
         <!-- TABPANE 5 -->

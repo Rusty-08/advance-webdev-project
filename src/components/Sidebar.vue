@@ -9,7 +9,7 @@
         }, 
         { 
             category: 'FLEXBOX', 
-            links: ['Tool Three', 'Tool Four'], 
+            links: ['Interactive Visualizer', 'Tool Four'], 
             icon: [faScrewdriverWrench, faScrewdriverWrench] 
         },
         { 
@@ -56,14 +56,13 @@
                 <template v-for="section in sidebar">
                     <span class="nav-link-header">{{ section.category }}</span>
                     <li v-for="(link, linkIndex) in section.links" :key="linkIndex" class="nav-item" role="presentation">
-                        <a :href="`#${getLink(link)}`"
+                        <a  href=""
                             class="nav-link"
                             :class="{ 'active': link == getLinkLists()[0] }"
                             :id="`${getLink(link)}-link`"
                             data-bs-toggle="pill"
                             :data-bs-target="`#${getLink(link)}`"
                             role="tab"
-                            type="button"
                             :aria-controls="getLink(link)"
                             :aria-selected="link == getLinkLists()[0] ? true : false"
                         >

@@ -70,9 +70,11 @@
 	const clearBoard = () => {
 		transcript.value = ''
 		sr.stop()
-		setTimeout(() => {
-			sr.start()
-		}, 1000)
+		if(isRecording.value === true) {
+			setTimeout(() => {
+				sr.start()
+			}, 1000)
+		}
 	};
 
 </script>
