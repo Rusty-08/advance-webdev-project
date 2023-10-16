@@ -1,8 +1,9 @@
 <script setup>
-    import { ref, onMounted } from 'vue'
+    import { ref, onMounted, watchEffect, computed } from 'vue'
 
-    const containerProperties = [
-        { 
+    let containerProperties = [
+        {   
+            model: ref(''),
             name: 'Flex-direction',
             options: [
                 'flex-column',
@@ -12,6 +13,7 @@
             ]
         },
         { 
+            model: ref(''),
             name: 'Align-items',
             options: [
                 'align-items-start',
@@ -22,16 +24,19 @@
             ]
         },
         { 
+            model: ref(''),
             name: 'Justify-content',
             options: [
                 'justify-content-start',
                 'justify-content-end',
+                'justify-content-center',
                 'justify-content-between',
                 'justify-content-around',
                 'justify-content-evenly',
             ]
         },
         { 
+            model: ref(''),
             name: 'Flex-wrap',
             options: [
                 'flex-wrap',
@@ -41,8 +46,9 @@
         }
     ]
 
-    const itemProperties = [
+    let itemProperties = [
         {
+            model: ref(''),
             name: 'Width',
             options: [
                 'w-auto',
@@ -53,6 +59,7 @@
             ]
         },
         {
+            model: ref(''),
             name: 'Height',
             options: [
                 'h-auto',
@@ -63,6 +70,7 @@
             ]
         },
         { 
+            model: ref(''),
             name: 'Align-self',
             options: [
                 'align-self-start',
@@ -73,6 +81,7 @@
             ]
         },
         { 
+            model: ref(''),
             name: 'Align-items',
             options: [
                 'align-items-start',
@@ -83,16 +92,19 @@
             ]
         },
         { 
+            model: ref(''),
             name: 'Justify-content',
             options: [
                 'justify-content-start',
                 'justify-content-end',
+                'justify-content-center',
                 'justify-content-between',
                 'justify-content-around',
                 'justify-content-evenly',
             ]
         },
         {
+            model: ref(''),
             name: 'Flex-grow',
             options: [
                 'flex-grow-0',
@@ -100,6 +112,7 @@
             ]
         },
         {
+            model: ref(''),
             name: 'Flex-shrink',
             options: [
                 'flex-shrink-0',
@@ -107,6 +120,7 @@
             ]
         },
         {
+            model: ref(''),
             name: 'Order',
             options: [
                 'order-first',
@@ -119,7 +133,25 @@
                 'order-5',
             ]
         },
-    ];
+    ]
+
+    let containerClasses = computed(() => getClasses(containerProperties))
+    let itemClasses = computed(() => getClasses(itemProperties))
+
+    const getClasses = (elements) => {
+        let arr = elements.filter(e => e.model.value !== '')
+        return arr.map(e => e.model.value).join(' ')
+    }
+
+    const updateContainerClasses = (index, value) => {
+        containerProperties[index].model.value = value
+        console.log(getClasses(containerProperties))
+    }
+
+    const updateItemClasses = (index, value) => {
+        itemProperties[index].model.value = value
+        console.log(getClasses(itemProperties))
+    };
 
 </script>
 
@@ -136,20 +168,17 @@
                             <h2 class="fs-8 py-2 text-center rounded-1 mb-3">Container</h2>
                             <div class="d-flex gap-2 flex-wrap">
                                 <select 
-                                    class="form-select fs-8 mb-2" 
-                                    aria-label="Default select example"
                                     v-for="(select, index) in containerProperties"
+                                    class="form-select fs-8 mb-2" 
                                     :key="index"
-                                >
-                                    <option 
-                                        selected
-                                    >
-                                        {{ select.name }}
-                                    </option>
-                                    
+                                    v-model="select.model.value"
+                                    @change="updateContainerClasses(index, $event.target.value)"
+                                > 
+                                    <option disabled value="">{{ select.name }}</option>                               
                                     <option
-                                        v-for="item in select.options"
+                                        v-for="(item, index) in select.options"
                                         :value="item"
+                                        :key="index"
                                     >
                                         {{ item }}
                                     </option>
@@ -163,19 +192,16 @@
                             <div class="d-flex flex-wrap gap-2">
                                 <select 
                                     class="form-select fs-8 mb-2" 
-                                    aria-label="Default select example"
                                     v-for="(select, index) in itemProperties"
                                     :key="index"
+                                    v-model="select.model.value"
+                                    @change="updateItemClasses(index, $event.target.value)"
                                 >
-                                    <option 
-                                        selected
-                                    >
-                                        {{ select.name }}
-                                    </option>
-                                    
+                                    <option disabled value="">{{ select.name }}</option>
                                     <option
-                                        v-for="item in select.options"
+                                        v-for="(item, index) in select.options"
                                         :value="item"
+                                        :key="index"
                                     >
                                         {{ item }}
                                     </option>
@@ -196,12 +222,18 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="container-board card tab-content" id="pills-tabContent">
+                    <div class="tab-content h-100" id="pills-tabContent">
                         <div class="tab-pane h-100 fade show active" id="visual-tab" role="tabpanel" aria-labelledby="visual" tabindex="0">
                             <div 
-                                class="item-card d-flex fw-semibold fs-7 card text-light"
+                                class="container-board d-flex card"
+                                :class="containerClasses"
                             >
-                                ITEM
+                                <div 
+                                    class="card item-card d-flex fw-semibold fs-7 text-light"
+                                    :class="itemClasses"
+                                >
+                                    ITEM
+                                </div>
                             </div>
                         </div>
                         <div class="tab-pane h-25 w-25 fade" id="code-tab" role="tabpanel" aria-labelledby="code" tabindex="0">
@@ -218,6 +250,7 @@
     .properties {
         width: 500px;
         border-width: 2px;
+        border-radius: 0;
         border-color: var(--secondary-text-color);
     }
     .container-header {
