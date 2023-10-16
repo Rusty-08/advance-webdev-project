@@ -1,5 +1,6 @@
 <script setup>
-    import { ref, onMounted, watchEffect, computed } from 'vue'
+    import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
+    import { ref, onMounted, watch, watchEffect, computed } from 'vue'
 
     let containerProperties = [
         {   
@@ -33,6 +34,17 @@
                 'justify-content-between',
                 'justify-content-around',
                 'justify-content-evenly',
+            ]
+        },
+        {   
+            model: ref(''),
+            name: 'Gap',
+            options: [
+                'gap-1',
+                'gap-2',
+                'gap-3',
+                'gap-4',
+                'gap-5',
             ]
         },
         { 
@@ -135,6 +147,9 @@
         },
     ]
 
+    let itemArr = ref([])
+    let itemNumber = ref(1)
+
     let containerClasses = computed(() => getClasses(containerProperties))
     let itemClasses = computed(() => getClasses(itemProperties))
 
@@ -145,20 +160,37 @@
 
     const updateContainerClasses = (index, value) => {
         containerProperties[index].model.value = value
-        console.log(getClasses(containerProperties))
     }
 
     const updateItemClasses = (index, value) => {
         itemProperties[index].model.value = value
-        console.log(getClasses(itemProperties))
-    };
+    }
+
+    const displayItems = () => {
+        itemArr.value.splice(0, itemArr.value.length)
+        for(let i = 0; i < itemNumber.value; i++) {
+            itemArr.value.push(`Item ${i + 1}`)
+        }
+    }
+
+    const minusItem = () => {
+        itemNumber.value--
+        displayItems()
+    }
+
+    const addItem = () => {
+        itemNumber.value++
+        displayItems()
+    }
+
+    displayItems();
 
 </script>
 
 <template>
     <section class="tab-pane fade" id="interactive-visualizer" role="tabpanel" aria-labelledby="interactive-visualizer-link" tabindex="0">
         <div class="container-fluid vh-100 p-4 py-3 shadow-sm">
-            <div class="page-content gap-3 card p-4 w-100 h-100 flex-row d-flex justify-content-center align-items-end">
+            <div class="page-content gap-3 card p-4 w-100 h-100 flex-row d-flex justify-content-center align-items-center">
                 <div class="properties d-flex flex-column card p-4 h-100">
                     <h2 class="fs-6 fw-semibold border-bottom pb-2">Flexbox bootstrap properties</h2>
                     <div class="d-flex flex-column gap-2 mt-2 w-100 h-100">
@@ -174,7 +206,7 @@
                                     v-model="select.model.value"
                                     @change="updateContainerClasses(index, $event.target.value)"
                                 > 
-                                    <option disabled value="">{{ select.name }}</option>                               
+                                    <option value="">{{ select.name }}</option>                               
                                     <option
                                         v-for="(item, index) in select.options"
                                         :value="item"
@@ -188,7 +220,24 @@
 
                         <!-- ITEM PROPERTIES -->
                         <div class="item-properties w-100">
-                            <h2 class="fs-8 py-2 text-center rounded-1 mb-3">Item</h2>
+                            <div class="mb-3 gap-2 d-flex align-items-center justify-content-center">
+                                <h2 class="fs-8 m-0 flex-grow-1 py-2 text-center rounded-1">Item</h2>
+                                <div class="item-number position-relative rounded-1 gap-3 d-flex align-items-center justify-content-center">
+                                    <button 
+                                        class="btn py-0 fs-8"
+                                        @click="minusItem()"
+                                    >
+                                        <font-awesome-icon :icon="faMinus" />
+                                    </button>
+                                    <span class="fw-semibold position-absolute">{{ itemNumber }}</span>
+                                    <button 
+                                        class="btn py-0 fs-8"
+                                        @click="addItem()"
+                                    >
+                                        <font-awesome-icon :icon="faPlus" />
+                                    </button>
+                                </div>
+                            </div>
                             <div class="d-flex flex-wrap gap-2">
                                 <select 
                                     class="form-select fs-8 mb-2" 
@@ -197,7 +246,7 @@
                                     v-model="select.model.value"
                                     @change="updateItemClasses(index, $event.target.value)"
                                 >
-                                    <option disabled value="">{{ select.name }}</option>
+                                    <option value="">{{ select.name }}</option>
                                     <option
                                         v-for="(item, index) in select.options"
                                         :value="item"
@@ -211,7 +260,7 @@
                     </div>
                 </div>
                 <div class="container-preview pt-2 container d-flex flex-column">
-                    <div class="container-header mb-1 d-flex align-items-end justify-content-between">
+                    <div class="container-header mb-1 d-flex align-items-center justify-content-between">
                         <h2 class="m-0 fs-6">Container</h2>
                         <ul class="nav nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
@@ -229,10 +278,11 @@
                                 :class="containerClasses"
                             >
                                 <div 
+                                    v-for="item in itemArr"
                                     class="card item-card d-flex fw-semibold fs-7 text-light"
                                     :class="itemClasses"
                                 >
-                                    ITEM
+                                    {{ item }}
                                 </div>
                             </div>
                         </div>
@@ -248,7 +298,7 @@
 
 <style setup>
     .properties {
-        width: 500px;
+        flex: 1;
         border-width: 2px;
         border-radius: 0;
         border-color: var(--secondary-text-color);
@@ -275,8 +325,9 @@
         color: var(--primary-text-color) !important;
     }
     .container-preview {
-        flex: 1;
         height: 100% !important;
+        width: 400px;
+        height: 400px !important;
     }
     .container-board {
         height: 100%;
@@ -287,12 +338,29 @@
     .item-properties h2 {
         background-color: var(--secondary-text-color);
         color: var(--primary-text-color);
+        height: 2rem;
+    }
+    .item-number {
+        border: 1px solid var(--secondary-text-color);
+        height: 2rem;
+    }
+    .item-number button {
+        height: 100%;
+        color: var(--secondary-text-color);
+    }
+    .item-number button:active {
+        border-color: transparent !important;
+    }
+    .item-number button:active svg {
+        transform: scale(1.1) !important;
+    }
+    .item-number-icon {
+        right: 1rem
     }
     .container-properties .form-select,
     .item-properties .form-select {
         width: 49% !important;
         color: var(--tertiary-text-color);
-        border-color: var(--secondary-text-color);
     }
     .item-card {
         border-radius: 0;
