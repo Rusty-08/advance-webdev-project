@@ -58,7 +58,7 @@
 <template>
     <section class="tab-pane fade" id="rgba-to-hex" role="tabpanel" aria-labelledby="rgba-to-hex-link" tabindex="0">
         <div class="container-fluid p-3 px-4 vh-100 d-flex justify-content-center align-items-center">
-            <div class="page-content gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
+            <div class="page-content shadow-sm gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
                 <h2 class="fs-5 mb-3">RGBA to Hex Converter</h2>
                 <div class="d-flex gap-4 align-items-center justify-content-center">
                     <div 

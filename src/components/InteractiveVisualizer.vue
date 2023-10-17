@@ -1,5 +1,5 @@
 <script setup>
-    import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
+    import { faMinus, faPlus, faCopy } from '@fortawesome/free-solid-svg-icons'
     import { ref, onMounted, watch, watchEffect, computed } from 'vue'
 
     let containerProperties = [
@@ -162,6 +162,7 @@
 
     let itemArr = ref([])
     let itemNumber = ref(1)
+    // let isClassesCopied = ref(false)
 
     let containerClasses = computed(() => getClasses(containerProperties))
     let itemClasses = computed(() => getClasses(itemProperties))
@@ -210,6 +211,11 @@
         displayItems()
     }
 
+    const copyClasses = (textToCopy) => {
+        navigator.clipboard.writeText(textToCopy)
+        // isClassesCopied.value = !isClassesCopied.value
+    }
+
     // initiate initial number of items
     displayItems();
 
@@ -217,9 +223,9 @@
 
 <template>
     <section class="tab-pane fade" id="interactive-visualizer" role="tabpanel" aria-labelledby="interactive-visualizer-link" tabindex="0">
-        <div class="container-fluid vh-100 p-4 py-3 shadow-sm">
-            <div class="page-content gap-3 card p-4 w-100 h-100 flex-row d-flex justify-content-center align-items-center">
-                <div class="properties d-flex flex-column card p-4 h-100">
+        <div class="container-fluid px-4 d-flex align-items-center justify-content-center">
+            <div class="page-content p-4 shadow-sm gap-3 card flex-row d-flex justify-content-center align-items-center">
+                <div class="properties p-4 d-flex flex-column align-self-stretch card">
                     <h2 class="fs-6 fw-semibold border-bottom pb-2">Flexbox bootstrap properties</h2>
                     <div class="d-flex flex-column gap-2 mt-2 w-100 h-100">
 
@@ -289,9 +295,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="container-preview pt-2 container d-flex flex-column">
-                    <div class="container-header mb-1 d-flex align-items-center justify-content-between">
-                        <h2 class="m-0 fs-6">Container</h2>
+                <div class="container-preview p-4 gap-2 d-flex flex-column justify-content-center align-self-stretch">
+                    <div class="container-header mb-1 d-flex justify-content-end">
                         <ul class="nav nav-pills" id="pills-tab" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link rounded-start-pill active" id="visual" data-bs-toggle="pill" data-bs-target="#visual-tab" type="button" role="tab" aria-controls="visual-tab" aria-selected="true">Visual</button>
@@ -301,24 +306,61 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="tab-content h-100" id="pills-tabContent">
-                        <div class="tab-pane h-100 fade show active" id="visual-tab" role="tabpanel" aria-labelledby="visual" tabindex="0">
-                            <div 
-                                class="container-board d-flex card"
-                                :class="containerClasses"
-                            >
+                    <div class="tab-content flex-grow-1 d-flex justify-content-center align-items-start" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="visual-tab" role="tabpanel" aria-labelledby="visual" tabindex="0">
+                            <div class="d-flex flex-column align-items-center justify-content-center">
+                                <h2 class="container-name fs-6">Container</h2>
                                 <div 
-                                    v-for="item in itemArr"
-                                    class="card item-card d-flex fw-semibold fs-7 text-light"
-                                    :class="itemClasses"
+                                    class="container-board d-flex"
+                                    :class="containerClasses"
                                 >
-                                    {{ item }}
+                                    <div 
+                                        v-for="item in itemArr"
+                                        class="item-card d-flex fw-semibold fs-7 text-light"
+                                        :class="itemClasses"
+                                    >
+                                        {{ item }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane h-100 fade" id="code-tab" role="tabpanel" aria-labelledby="code" tabindex="0">
-                            <div class="container-board card">
-                                Code
+                            <h2 class="container-name fs-6">Code</h2>
+                            <div class="container-board d-flex gap-2 card p-3">
+                                <span class="fs-7 fw-semibold">Bootstap Class</span>
+                                <div class="container-classes card p-2">
+                                    <div class="container-classes-header d-flex align-items-center justify-content-between">
+                                        <p class="px-1 fs-8 mb-1">Container</p>
+                                        <button 
+						                	class="btn fs-9 mb-1 py-1 px-3 bg-secondary-emphasis d-flex align-items-center gap-1"
+						                	@click="copyClasses(containerClasses)"
+						                >
+						                	<p class="m-0">Copy</p>
+						                	<font-awesome-icon 
+						                		:icon="faCopy"
+                    	                        class="text-center" 
+                    	                    />
+						                </button>
+                                    </div>
+                                    <span class="fs-8 p-1 px-2">{{ containerClasses }}</span>
+                                </div>
+                                <div class="item-classes card p-2">
+                                    <div class="container-classes-header d-flex align-items-center justify-content-between">
+                                        <p v-if="itemNumber == 1" class="px-1 fs-8 mb-1">{{ `Item — ${itemNumber} element` }}</p>
+                                        <p v-else class="px-1 fs-8 mb-1">{{ `Item — ${itemNumber} elements` }}</p>
+                                        <button 
+						                	class="btn fs-9 mb-1 py-1 px-3 bg-secondary-emphasis d-flex align-items-center gap-1"
+						                	@click="copyClasses(itemClasses)"
+						                >
+						                	<p class="m-0">Copy</p>
+						                	<font-awesome-icon 
+						                		:icon="faCopy"
+                    	                        class="text-center" 
+                    	                    />
+						                </button>
+                                    </div>
+                                    <span class="fs-8 p-1 px-2">{{ itemClasses }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -329,11 +371,16 @@
 </template>
 
 <style setup>
+    #interactive-visualizer .container-fluid {
+        min-height: 100vh !important;
+    }
+    #interactive-visualizer .page-content {
+        min-height: 95vh !important;
+    }
     .properties {
         flex: 1;
-        border-width: 2px;
         border-radius: 0;
-        border-color: var(--secondary-text-color);
+        border-color: var(--tertiary-text-color);
     }
     .container-header {
         height: 2rem !important;
@@ -357,11 +404,16 @@
         color: var(--primary-text-color) !important;
     }
     .container-preview {
-        width: 400px;
-        height: 400px !important;
+        width: 450px;
+        border: 1px solid var(--tertiary-text-color);
+    }
+    .container-header,
+    .container-name,
+    .container-board {
+        width: 400px !important;
     }
     .container-board {
-        height: 100%;
+        height: 400px !important;
         border: 2px solid var(--secondary-text-color);
         border-radius: 0;
         transition: var(--transition-275s);
@@ -391,7 +443,7 @@
     }
     .container-properties .form-select,
     .item-properties .form-select {
-        width: 49% !important;
+        width: 48.8% !important;
         color: var(--tertiary-text-color);
     }
     .itemSelected {
@@ -402,5 +454,24 @@
         border: 2px solid var(--tertiary-text-color);
         background-color: var(--secondary-text-color);
         transition: var(--transition-275s);
+    }
+    .container-classes span,
+    .item-classes span {
+        background-color: var(--background-color);
+    }
+    .container-classes-header button {
+        transition: var(--transition-175s);
+        border-radius: 3px;
+    }
+    .container-classes-header button svg {
+        color: var(--secondary-text-color) !important;
+    }
+    .container-classes-header button:active {
+        border-color: transparent !important;
+        background-color: var(--background-color) !important;
+    }
+    .container-classes-header button:hover p,
+    .container-classes-header button:hover svg {
+        color: var(--tertiary-text-color) !important;
     }
 </style>

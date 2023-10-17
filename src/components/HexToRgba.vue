@@ -91,8 +91,8 @@ const copyRgba = (textToCopy) => {
 
 <template>
     <section class="tab-pane fade show active" id="hex-to-rgba" role="tabpanel" aria-labelledby="hex-to-rgba-link" tabindex="0">
-        <div class="container-fluid vh-100 p-4 py-3 shadow-sm">
-            <div class="page-content gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
+        <div class="container-fluid vh-100 p-4 py-3">
+            <div class="page-content shadow-sm gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
                 <h2 class="fs-5">Hex to RGBA Converter</h2>
                 <input
                     type="text"

@@ -1,5 +1,5 @@
 <script setup>
-    import { faBrush, faFileInvoice, faFillDrip, faMicrophoneLines, faPalette, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons'
+    import { faBox, faBrush, faFileInvoice, faFillDrip, faMicrophoneLines, faPalette, faScrewdriverWrench, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons'
 
     const sidebar = [
         { 
@@ -10,7 +10,7 @@
         { 
             category: 'FLEXBOX', 
             links: ['Interactive Visualizer', 'Tool Four'], 
-            icon: [faScrewdriverWrench, faScrewdriverWrench] 
+            icon: [faTableCellsLarge, faScrewdriverWrench] 
         },
         { 
             category: 'GENERATOR', 

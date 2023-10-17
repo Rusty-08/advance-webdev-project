@@ -81,8 +81,8 @@
 
 <template>
     <section class="tab-pane fade" id="voice-to-text" role="tabpanel" aria-labelledby="voice-to-text-link" tabindex="0">
-        <div class="container-fluid vh-100 p-4 py-3 shadow-sm">
-            <div class="page-content gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
+        <div class="container-fluid vh-100 p-4 py-3">
+            <div class="page-content shadow-sm gap-3 card p-4 w-100 h-100 d-flex justify-content-center align-items-center">
 				<h2 class="fs-5">Voice to Text</h2>
 				<button 
 					@click="record()" 
