@@ -11,7 +11,8 @@
                 'flex-column-reverse',
                 'flex-row',
                 'flex-row-reverse'
-            ]
+            ],
+            isSelected: ref(false)
         },
         { 
             model: ref(''),
@@ -22,7 +23,8 @@
                 'align-items-center',
                 'align-items-baseline',
                 'align-items-stretch',
-            ]
+            ],
+            isSelected: ref(false)
         },
         { 
             model: ref(''),
@@ -34,7 +36,8 @@
                 'justify-content-between',
                 'justify-content-around',
                 'justify-content-evenly',
-            ]
+            ],
+            isSelected: ref(false)
         },
         {   
             model: ref(''),
@@ -45,7 +48,8 @@
                 'gap-3',
                 'gap-4',
                 'gap-5',
-            ]
+            ],
+            isSelected: ref(false)
         },
         { 
             model: ref(''),
@@ -54,7 +58,8 @@
                 'flex-wrap',
                 'flex-nowrap',
                 'flex-wrap-reverse'
-            ]
+            ],
+            isSelected: ref(false)
         }
     ]
 
@@ -68,7 +73,8 @@
                 'w-50',
                 'w-75',
                 'w-100'
-            ]
+            ],
+            isSelected: ref(false)
         },
         {
             model: ref(''),
@@ -79,7 +85,8 @@
                 'h-50',
                 'h-75',
                 'h-100'
-            ]
+            ],
+            isSelected: ref(false)
         },
         { 
             model: ref(''),
@@ -90,7 +97,8 @@
                 'align-self-center',
                 'align-self-baseline',
                 'align-self-stretch',
-            ]
+            ],
+            isSelected: ref(false)
         },
         { 
             model: ref(''),
@@ -101,7 +109,8 @@
                 'align-items-center',
                 'align-items-baseline',
                 'align-items-stretch',
-            ]
+            ],
+            isSelected: ref(false)
         },
         { 
             model: ref(''),
@@ -113,7 +122,8 @@
                 'justify-content-between',
                 'justify-content-around',
                 'justify-content-evenly',
-            ]
+            ],
+            isSelected: ref(false)
         },
         {
             model: ref(''),
@@ -121,7 +131,8 @@
             options: [
                 'flex-grow-0',
                 'flex-grow-1',
-            ]
+            ],
+            isSelected: ref(false)
         },
         {
             model: ref(''),
@@ -129,7 +140,8 @@
             options: [
                 'flex-shrink-0',
                 'flex-shrink-1',
-            ]
+            ],
+            isSelected: ref(false)
         },
         {
             model: ref(''),
@@ -143,7 +155,8 @@
                 'order-3',
                 'order-4',
                 'order-5',
-            ]
+            ],
+            isSelected: ref(false)
         },
     ]
 
@@ -154,35 +167,50 @@
     let itemClasses = computed(() => getClasses(itemProperties))
 
     const getClasses = (elements) => {
-        let arr = elements.filter(e => e.model.value !== '')
-        return arr.map(e => e.model.value).join(' ')
+        
+        elements
+            .filter(e => e.model.value == '')
+            .map(e => e.isSelected.value = false)
+
+        let isSelectedItems = elements.filter(e => e.model.value !== '')
+        isSelectedItems.map(e => e.isSelected.value = true)
+        
+        return isSelectedItems.map(e => e.model.value).join(' ')
     }
 
+    // update the value of each container model/properties when changed
     const updateContainerClasses = (index, value) => {
         containerProperties[index].model.value = value
     }
 
+    // update the value of each item model/properties when changed
     const updateItemClasses = (index, value) => {
         itemProperties[index].model.value = value
     }
 
     const displayItems = () => {
+        // remove all the items
         itemArr.value.splice(0, itemArr.value.length)
+        
+        // add new number of items
         for(let i = 0; i < itemNumber.value; i++) {
             itemArr.value.push(`Item ${i + 1}`)
         }
     }
 
     const minusItem = () => {
+        if(itemNumber.value === 1) return
         itemNumber.value--
         displayItems()
     }
 
     const addItem = () => {
+        if(itemNumber.value === 5) return
         itemNumber.value++
         displayItems()
     }
 
+    // initiate initial number of items
     displayItems();
 
 </script>
@@ -197,11 +225,12 @@
 
                         <!-- CONTAINER PROPERTIES -->
                         <div class="container-properties w-100">
-                            <h2 class="fs-8 py-2 text-center rounded-1 mb-3">Container</h2>
+                            <h2 class="fs-8 d-flex justify-content-center align-items-center text-center rounded-1 mb-3">Container</h2>
                             <div class="d-flex gap-2 flex-wrap">
                                 <select 
                                     v-for="(select, index) in containerProperties"
                                     class="form-select fs-8 mb-2" 
+                                    :class="{ 'itemSelected shadow-sm': select.isSelected.value == true }"
                                     :key="index"
                                     v-model="select.model.value"
                                     @change="updateContainerClasses(index, $event.target.value)"
@@ -221,7 +250,7 @@
                         <!-- ITEM PROPERTIES -->
                         <div class="item-properties w-100">
                             <div class="mb-3 gap-2 d-flex align-items-center justify-content-center">
-                                <h2 class="fs-8 m-0 flex-grow-1 py-2 text-center rounded-1">Item</h2>
+                                <h2 class="fs-8 m-0 d-flex justify-content-center align-items-center flex-grow-1 text-center rounded-1">Item</h2>
                                 <div class="item-number position-relative rounded-1 gap-3 d-flex align-items-center justify-content-center">
                                     <button 
                                         class="btn py-0 fs-8"
@@ -240,8 +269,9 @@
                             </div>
                             <div class="d-flex flex-wrap gap-2">
                                 <select 
-                                    class="form-select fs-8 mb-2" 
                                     v-for="(select, index) in itemProperties"
+                                    class="form-select fs-8 mb-2"
+                                    :class="{ 'itemSelected shadow-sm': select.isSelected.value == true }" 
                                     :key="index"
                                     v-model="select.model.value"
                                     @change="updateItemClasses(index, $event.target.value)"
@@ -286,8 +316,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane h-25 w-25 fade" id="code-tab" role="tabpanel" aria-labelledby="code" tabindex="0">
-                            Code
+                        <div class="tab-pane h-100 fade" id="code-tab" role="tabpanel" aria-labelledby="code" tabindex="0">
+                            <div class="container-board card">
+                                Code
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -325,7 +357,6 @@
         color: var(--primary-text-color) !important;
     }
     .container-preview {
-        height: 100% !important;
         width: 400px;
         height: 400px !important;
     }
@@ -333,15 +364,16 @@
         height: 100%;
         border: 2px solid var(--secondary-text-color);
         border-radius: 0;
+        transition: var(--transition-275s);
     }
     .container-properties h2,
     .item-properties h2 {
-        background-color: var(--secondary-text-color);
-        color: var(--primary-text-color);
+        border: 2px solid var(--secondary-text-color);
+        color: var(--tertiary-text-color);
         height: 2rem;
     }
     .item-number {
-        border: 1px solid var(--secondary-text-color);
+        border: 2px solid var(--secondary-text-color);
         height: 2rem;
     }
     .item-number button {
@@ -362,8 +394,13 @@
         width: 49% !important;
         color: var(--tertiary-text-color);
     }
+    .itemSelected {
+        border-color: var(--tertiary-text-color) !important;
+    }
     .item-card {
         border-radius: 0;
-        background-color: var(--sidebar-background-color);
+        border: 2px solid var(--tertiary-text-color);
+        background-color: var(--secondary-text-color);
+        transition: var(--transition-275s);
     }
 </style>
