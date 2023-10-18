@@ -1,5 +1,5 @@
 <script setup>
-    import { faMinus, faPlus, faCopy } from '@fortawesome/free-solid-svg-icons'
+    import { faMinus, faPlus, faCopy, faCubes, faSquareFull, faCircleArrowLeft, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons'
     import { ref, onMounted, watch, watchEffect, computed } from 'vue'
 
     let containerProperties = [
@@ -162,18 +162,19 @@
 
     let itemArr = ref([])
     let itemNumber = ref(1)
-    // let isClassesCopied = ref(false)
+
+    let containerCss = ref({})
 
     let containerClasses = computed(() => getClasses(containerProperties))
     let itemClasses = computed(() => getClasses(itemProperties))
 
-    const getClasses = (elements) => {
-        
+    const getClasses = elements => {
         elements
             .filter(e => e.model.value == '')
             .map(e => e.isSelected.value = false)
 
         let isSelectedItems = elements.filter(e => e.model.value !== '')
+        
         isSelectedItems.map(e => e.isSelected.value = true)
         
         return isSelectedItems.map(e => e.model.value).join(' ')
@@ -199,6 +200,18 @@
         }
     }
 
+    // const generateContainrerCss = () => {
+    //     let classesArr = .split(' ')
+
+    //     for(let i = 0; i < classesArr.length; i++) {
+    //         let key = classesArr[i].split('-').slice(0, classesArr[i].length - 1)
+    //         let val = classesArr[i].split('-').pop()
+
+    //         containerCss.value[`${key}`] = val
+    //         console.log(containerCss.value)
+    //     }
+    // }
+
     const minusItem = () => {
         if(itemNumber.value === 1) return
         itemNumber.value--
@@ -213,7 +226,17 @@
 
     const copyClasses = (textToCopy) => {
         navigator.clipboard.writeText(textToCopy)
-        // isClassesCopied.value = !isClassesCopied.value
+    }
+
+    const resetFlexboxClasses = () => {
+        for(let i = 0; i < containerProperties.length; i++) {
+            containerProperties[i].model.value = ''
+        }
+        for(let i = 0; i < itemProperties.length; i++) {
+            itemProperties[i].model.value = ''
+        }
+        itemNumber.value = 1
+        displayItems()
     }
 
     // initiate initial number of items
@@ -226,16 +249,31 @@
         <div class="container-fluid px-4 d-flex align-items-center justify-content-center">
             <div class="page-content p-4 shadow-sm gap-3 card flex-row d-flex justify-content-center align-items-center">
                 <div class="properties p-4 d-flex flex-column align-self-stretch card">
-                    <h2 class="fs-6 fw-semibold border-bottom pb-2">Flexbox bootstrap properties</h2>
-                    <div class="d-flex flex-column gap-2 mt-2 w-100 h-100">
+                    <h2 class="fs-6 fw-semibold border-bottom pb-2">
+                        <font-awesome-icon :icon="faCubes" />
+                        Flexbox bootstrap
+                    </h2>
+                    <div class="d-flex flex-column gap-2 w-100 h-100">
 
                         <!-- CONTAINER PROPERTIES -->
                         <div class="container-properties w-100">
-                            <h2 class="fs-8 d-flex justify-content-center align-items-center text-center rounded-1 mb-3">Container</h2>
+                            <div class="mb-3 py-2 border-bottom d-flex align-items-center justify-content-center">
+                                <h2 class="fs-8 m-0 flex-grow-1 d-flex gap-2 align-items-center">
+                                    <font-awesome-icon :icon="faSquareFull" />
+                                    Container
+                                </h2>
+                                <button 
+                                    class="reset-flexbox btn py-1 px-3 fs-8 d-flex align-items-center gap-2"
+                                    @click="resetFlexboxClasses()"
+                                >
+                                    <font-awesome-icon :icon="faArrowRotateLeft" class="fs-9" />
+                                    Reset
+                                </button>
+                            </div>
                             <div class="d-flex gap-2 flex-wrap">
                                 <select 
                                     v-for="(select, index) in containerProperties"
-                                    class="form-select fs-8 mb-2" 
+                                    class="form-select mb-1 fs-8" 
                                     :class="{ 'itemSelected shadow-sm': select.isSelected.value == true }"
                                     :key="index"
                                     v-model="select.model.value"
@@ -255,18 +293,28 @@
 
                         <!-- ITEM PROPERTIES -->
                         <div class="item-properties w-100">
-                            <div class="mb-3 gap-2 d-flex align-items-center justify-content-center">
-                                <h2 class="fs-8 m-0 d-flex justify-content-center align-items-center flex-grow-1 text-center rounded-1">Item</h2>
+                            <div class="mb-3 py-2 gap-2 border-bottom d-flex align-items-center justify-content-center">
+                                <h2 
+                                    v-if="itemNumber == 1" 
+                                    class="fs-8 m-0 d-flex gap-2 align-items-center flex-grow-1"
+                                >
+                                    <font-awesome-icon :icon="faSquareFull" />
+                                    Item
+                                </h2>
+                                <h2 v-else class="fs-8 m-0 d-flex gap-2 align-items-center flex-grow-1">
+                                    <font-awesome-icon :icon="faSquareFull" />
+                                    Items
+                                </h2>
                                 <div class="item-number position-relative rounded-1 gap-3 d-flex align-items-center justify-content-center">
                                     <button 
-                                        class="btn py-0 fs-8"
+                                        class="btn py-1 fs-8"
                                         @click="minusItem()"
                                     >
                                         <font-awesome-icon :icon="faMinus" />
                                     </button>
                                     <span class="fw-semibold position-absolute">{{ itemNumber }}</span>
                                     <button 
-                                        class="btn py-0 fs-8"
+                                        class="btn py-1 fs-8"
                                         @click="addItem()"
                                     >
                                         <font-awesome-icon :icon="faPlus" />
@@ -276,7 +324,7 @@
                             <div class="d-flex flex-wrap gap-2">
                                 <select 
                                     v-for="(select, index) in itemProperties"
-                                    class="form-select fs-8 mb-2"
+                                    class="form-select fs-8 mb-1"
                                     :class="{ 'itemSelected shadow-sm': select.isSelected.value == true }" 
                                     :key="index"
                                     v-model="select.model.value"
@@ -414,22 +462,30 @@
     }
     .container-board {
         height: 400px !important;
-        border: 2px solid var(--secondary-text-color);
+        border: 2px solid var(--tertiary-text-color);
         border-radius: 0;
         transition: var(--transition-275s);
     }
     .container-properties h2,
-    .item-properties h2 {
-        border: 2px solid var(--secondary-text-color);
-        color: var(--tertiary-text-color);
+    .item-properties h2 {        
         height: 2rem;
     }
-    .item-number {
-        border: 2px solid var(--secondary-text-color);
-        height: 2rem;
+    .container-properties h2>svg {
+        color: var(--tertiary-text-color);
+    }
+    .item-properties h2>svg {
+        color: var(--primary-color);
+    }
+    .reset-flexbox {
+        color: var(--secondary-text-color);
+        transition: var(--transition-175s);
+    }
+    .item-number,
+    .reset-flexbox,
+    .reset-flexbox:hover {
+        border: 1px solid var(--secondary-text-color);
     }
     .item-number button {
-        height: 100%;
         color: var(--secondary-text-color);
     }
     .item-number button:active {
@@ -451,8 +507,8 @@
     }
     .item-card {
         border-radius: 0;
-        border: 2px solid var(--tertiary-text-color);
-        background-color: var(--secondary-text-color);
+        border: 2px solid var(--secondary-text-color);
+        background-color: var(--primary-color);
         transition: var(--transition-275s);
     }
     .container-classes span,

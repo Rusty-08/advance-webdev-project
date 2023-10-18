@@ -40,5 +40,6 @@
         width: calc(100% - var(--sidebar-width));
         min-height: 100vh !important;
         margin-left: var(--sidebar-width);
+        transition: var(--transition-275s);
     }
 </style>

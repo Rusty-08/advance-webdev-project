@@ -150,5 +150,4 @@
     .copy-result svg {
         width: 1rem;
     }
-
 </style>
