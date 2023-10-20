@@ -1,5 +1,5 @@
 <script setup>
-    import { faBox, faBrush, faChevronRight, faCubes, faEllipsis, faFileInvoice, faFillDrip, faMicrophoneLines, faMicroscope, faPalette, faRightToBracket, faScrewdriverWrench, faSquareFull, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons'
+    import { faBox, faBrush, faChevronLeft, faChevronRight, faCubes, faEllipsis, faFileInvoice, faFillDrip, faMicrophoneLines, faMicroscope, faPalette, faRightToBracket, faScrewdriverWrench, faSquareFull, faTableCellsLarge } from '@fortawesome/free-solid-svg-icons'
     import { ref } from 'vue'
 
     let isSidebarShrinked = ref(false)
@@ -40,8 +40,7 @@
 
     const toggleSidebarWidth = () => {
         isSidebarShrinked.value = !isSidebarShrinked.value
-
-        if(isSidebarShrinked.value) {
+        if(isSidebarShrinked.value == true) {
             document.documentElement.style.setProperty('--sidebar-width', '5.5rem');
         } else {
             document.documentElement.style.setProperty('--sidebar-width', '17rem');
@@ -105,22 +104,23 @@
             @click="toggleSidebarWidth()"
         >
             <font-awesome-icon 
-                :icon="faChevronRight" 
+                :icon="faChevronLeft" 
                 class="sidebar-minimizer position-absolute" 
+                :class="{ 'minimizedIcon': isSidebarShrinked }"
             />     
         </button>
     </aside>
 </template>
 
 <style setup>
-    .nav::-webkit-scrollbar {
+    .scroll-on-hover::-webkit-scrollbar {
         width: 4px;
     }
-    .nav::-webkit-scrollbar-thumb {
+    .scroll-on-hover::-webkit-scrollbar-thumb {
         background-color: transparent;
         border-radius: 6px;
     }
-    .nav:hover::-webkit-scrollbar-thumb {
+    .scroll-on-hover:hover::-webkit-scrollbar-thumb {
         background-color: #282831;
     }
     .side-bar {
@@ -154,7 +154,7 @@
         transition: var(--transition-275s);
     }
     .ShrinkedSidebar {
-        width: 5.5rem !important;
+        width: 5.5rem;
     }
     .nav-link-header {
         color: var(--tertiary-text-color);
@@ -163,8 +163,13 @@
         padding: 1.5rem 0 0.7rem 0.8rem !important;
     }
     .ellipisis {
+        transition: var(--transition-375s);
         font-size: 1.2rem !important;
         padding: 1.45rem 0 0.7rem 0rem !important;
+    }
+    .minimizedIcon {
+        transition: var(--transition-375s);
+        transform: rotate(180deg) !important;
     }
     .nav-item {
         padding: 0.15rem 0 !important;

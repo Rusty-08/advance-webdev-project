@@ -1,6 +1,6 @@
 <script setup>
     import { faMinus, faPlus, faCopy, faCubes, faSquareFull, faCircleArrowLeft, faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons'
-    import { ref, onMounted, watch, watchEffect, computed } from 'vue'
+    import { ref, reactive, onMounted, watch, watchEffect, computed } from 'vue'
 
     let containerProperties = [
         {   
@@ -163,8 +163,8 @@
     let itemArr = ref([])
     let itemNumber = ref(1)
 
-    let containerCss = ref({})
-
+    let containerCss = reactive({})
+    let itemCss = reactive({})
     let containerClasses = computed(() => getClasses(containerProperties))
     let itemClasses = computed(() => getClasses(itemProperties))
 
@@ -200,17 +200,52 @@
         }
     }
 
-    // const generateContainrerCss = () => {
-    //     let classesArr = .split(' ')
+    const convertToCssFormat = (cssStyles, classes) => {
+        if (typeof classes !== 'string') {
+          return
+        }
 
-    //     for(let i = 0; i < classesArr.length; i++) {
-    //         let key = classesArr[i].split('-').slice(0, classesArr[i].length - 1)
-    //         let val = classesArr[i].split('-').pop()
+        classes.split(' ').forEach((className) => {
+            let classProperty = className.split('-')
+            let key = classProperty.slice(0, classProperty.length - 1).join('-')
+            let value = classProperty[classProperty.length - 1]
+            
+            if (value == '') return
+            
+            switch (key) {
+                case 'h':
+                    key = 'height'
+                    break
+                case 'w':
+                    key = 'width'
+                    break
+                case 'flex':
+                    key = 'flex-direction'
+                    break
+                case 'gap':
+                    value = checkGapValue(value)
+                    break
+                default:
+                    break
+            }
+            
+            cssStyles[key] = value
+        })
 
-    //         containerCss.value[`${key}`] = val
-    //         console.log(containerCss.value)
-    //     }
-    // }
+        return cssStyles
+    }
+
+    const checkGapValue = value => {
+        if(value == 1) return '0.25rem'
+        if(value == 2) return '0.5rem'
+        if(value == 3) return '1rem'
+        if(value == 4) return '1.5rem'
+        if(value == 5) return '3rem'
+    }
+
+    const formatCss = classes => {
+        
+    }
 
     const minusItem = () => {
         if(itemNumber.value === 1) return
@@ -240,7 +275,10 @@
     }
 
     // initiate initial number of items
-    displayItems();
+    displayItems()
+
+    watchEffect(() => convertToCssFormat(containerCss, containerClasses.value));
+    watchEffect(() => convertToCssFormat(itemCss, itemClasses.value));
 
 </script>
 
@@ -374,8 +412,8 @@
                         </div>
                         <div class="tab-pane h-100 fade" id="code-tab" role="tabpanel" aria-labelledby="code" tabindex="0">
                             <h2 class="container-name fs-6">Code</h2>
-                            <div class="container-board d-flex gap-2 card p-3">
-                                <span class="fs-7 fw-semibold">Bootstap Class</span>
+                            <div class="container-board scroll-on-hover generated-code d-flex gap-2 card p-3 px-4">
+                                <span class="fs-7 fw-semibold pb-2 border-bottom">Bootstap Class</span>
                                 <div class="container-classes card p-2">
                                     <div class="container-classes-header d-flex align-items-center justify-content-between">
                                         <p class="px-1 fs-8 mb-1">Container</p>
@@ -408,6 +446,45 @@
 						                </button>
                                     </div>
                                     <span class="fs-8 p-1 px-2">{{ itemClasses }}</span>
+                                </div>
+
+                                <!--  -->
+                                <span class="fs-7 mt-3 fw-semibold pb-2 border-bottom">CSS Styles</span>
+                                <div class="container-classes card p-2">
+                                    <div class="container-classes-header d-flex align-items-center justify-content-between">
+                                        <p class="px-1 fs-8 mb-1">Container</p>
+                                        <button 
+						                	class="btn fs-9 mb-1 py-1 px-3 bg-secondary-emphasis d-flex align-items-center gap-1"
+						                	@click="copyClasses(containerCss)"
+						                >
+						                	<p class="m-0">Copy</p>
+						                	<font-awesome-icon 
+						                		:icon="faCopy"
+                    	                        class="text-center" 
+                    	                    />
+						                </button>
+                                    </div>
+                                    <span class="fs-8 p-1 px-2">{{ containerCss }}</span>
+                                </div>
+                                <div class="container-classes card p-2">
+                                    <div class="container-classes-header d-flex align-items-center justify-content-between">
+                                        <p class="px-1 fs-8 mb-1">Item</p>
+                                        <button 
+						                	class="btn fs-9 mb-1 py-1 px-3 bg-secondary-emphasis d-flex align-items-center gap-1"
+						                	@click="copyClasses(itemCss)"
+						                >
+						                	<p class="m-0">Copy</p>
+						                	<font-awesome-icon 
+						                		:icon="faCopy"
+                    	                        class="text-center" 
+                    	                    />
+						                </button>
+                                    </div>
+                                    <span 
+                                        class="fs-8 p-1 px-2"
+                                    >
+                                        {{ itemCss }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -529,5 +606,8 @@
     .container-classes-header button:hover p,
     .container-classes-header button:hover svg {
         color: var(--tertiary-text-color) !important;
+    }
+    .generated-code {
+        overflow-y: scroll;
     }
 </style>
