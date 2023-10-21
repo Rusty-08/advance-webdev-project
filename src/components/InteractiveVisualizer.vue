@@ -169,8 +169,8 @@
     let containerClasses = computed(() => getClasses(containerProperties))
     let itemClasses = computed(() => getClasses(itemProperties))
 
-    const convertedContainerCSS = computed(() => convertToCssFormat(containerCss, containerClasses))
-    const convertedItemCSS = computed(() => convertToCssFormat(itemCss, itemClasses));
+    const convertedContainerCSS = computed(() => convertToCssFormat('container',containerCss, containerClasses))
+    const convertedItemCSS = computed(() => convertToCssFormat('item',itemCss, itemClasses));
 
     const getClasses = elements => {
         elements
@@ -219,18 +219,24 @@
             switch (key) {
                 case 'h':
                     key = 'height'
+                    value = convertCSSLength(value)
                     break
                 case 'w':
                     key = 'width'
-                    break
-                case 'flex':
-                    key = 'flex-direction'
+                    value = convertCSSLength(value)
                     break
                 case 'gap':
                     value = checkGapValue(value)
                     break
+                case 'flex':
+                    key = 'flex-wrap'
+                    break
                 default:
                     break
+            }
+
+            if(value == 'column' || value == 'column-reverse' || value == 'row' || value == 'row-reverse') {
+                key = 'flex-direction'
             }
             
             cssStyles[key] = value
@@ -247,11 +253,18 @@
         if(value == 5) return '3rem'
     }
 
-    const convertToCssFormat = (target, classes) => {
+    const convertCSSLength = value => {
+        if(value == 25) return '25%'
+        if(value == 50) return '50%'
+        if(value == 75) return '75%'
+        if(value == 100) return '100%'
+    }
+
+    const convertToCssFormat = (name, target, classes) => {
 
         let obj = convertClassesToObject(target, classes.value)
 
-        let cssString = '.class-name {\n'
+        let cssString = `.${name} {\n`
             for (let key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     cssString += `\t${key}: ${obj[key]};\n`
