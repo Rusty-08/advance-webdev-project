@@ -121,14 +121,11 @@
         border-radius: 6px;
     }
     .scroll-on-hover:hover::-webkit-scrollbar-thumb {
-        background-color: #282831;
+        background-color: var(--secondary-text-color);
     }
     .side-bar {
         position: fixed !important;
         z-index: 500;
-    }
-    .nav {
-        height: calc(100% - --header-height);
     }
     .logo-header {
         border-bottom: var(--border-dashed);

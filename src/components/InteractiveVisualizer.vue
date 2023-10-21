@@ -165,8 +165,12 @@
 
     let containerCss = reactive({})
     let itemCss = reactive({})
+
     let containerClasses = computed(() => getClasses(containerProperties))
     let itemClasses = computed(() => getClasses(itemProperties))
+
+    const convertedContainerCSS = computed(() => convertToCssFormat(containerCss, containerClasses))
+    const convertedItemCSS = computed(() => convertToCssFormat(itemCss, itemClasses));
 
     const getClasses = elements => {
         elements
@@ -200,7 +204,7 @@
         }
     }
 
-    const convertToCssFormat = (cssStyles, classes) => {
+    const convertClassesToObject = (cssStyles, classes) => {
         if (typeof classes !== 'string') {
           return
         }
@@ -243,8 +247,18 @@
         if(value == 5) return '3rem'
     }
 
-    const formatCss = classes => {
-        
+    const convertToCssFormat = (target, classes) => {
+
+        let obj = convertClassesToObject(target, classes.value)
+
+        let cssString = '.class-name {\n'
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    cssString += `\t${key}: ${obj[key]};\n`
+                }
+            }
+        cssString += '}'
+        return cssString;
     }
 
     const minusItem = () => {
@@ -275,10 +289,7 @@
     }
 
     // initiate initial number of items
-    displayItems()
-
-    watchEffect(() => convertToCssFormat(containerCss, containerClasses.value));
-    watchEffect(() => convertToCssFormat(itemCss, itemClasses.value));
+    displayItems();
 
 </script>
 
@@ -301,7 +312,7 @@
                                     Container
                                 </h2>
                                 <button 
-                                    class="reset-flexbox btn py-1 px-3 fs-8 d-flex align-items-center gap-2"
+                                    class="reset-flexbox btn rounded-1 py-1 px-3 fs-8 d-flex align-items-center gap-2"
                                     @click="resetFlexboxClasses()"
                                 >
                                     <font-awesome-icon :icon="faArrowRotateLeft" class="fs-9" />
@@ -455,7 +466,7 @@
                                         <p class="px-1 fs-8 mb-1">Container</p>
                                         <button 
 						                	class="btn fs-9 mb-1 py-1 px-3 bg-secondary-emphasis d-flex align-items-center gap-1"
-						                	@click="copyClasses(containerCss)"
+						                	@click="copyClasses(convertedContainerCSS)"
 						                >
 						                	<p class="m-0">Copy</p>
 						                	<font-awesome-icon 
@@ -464,14 +475,14 @@
                     	                    />
 						                </button>
                                     </div>
-                                    <span class="fs-8 p-1 px-2">{{ containerCss }}</span>
+                                    <span class="fs-8 p-1 px-2">{{ convertedContainerCSS }}</span>
                                 </div>
                                 <div class="container-classes card p-2">
                                     <div class="container-classes-header d-flex align-items-center justify-content-between">
                                         <p class="px-1 fs-8 mb-1">Item</p>
                                         <button 
 						                	class="btn fs-9 mb-1 py-1 px-3 bg-secondary-emphasis d-flex align-items-center gap-1"
-						                	@click="copyClasses(itemCss)"
+						                	@click="copyClasses(convertedItemCSS)"
 						                >
 						                	<p class="m-0">Copy</p>
 						                	<font-awesome-icon 
@@ -483,7 +494,7 @@
                                     <span 
                                         class="fs-8 p-1 px-2"
                                     >
-                                        {{ itemCss }}
+                                        {{ convertedItemCSS }}
                                     </span>
                                 </div>
                             </div>
@@ -558,9 +569,12 @@
         transition: var(--transition-175s);
     }
     .item-number,
-    .reset-flexbox,
-    .reset-flexbox:hover {
+    .reset-flexbox {
         border: 1px solid var(--secondary-text-color);
+    }
+    .reset-flexbox:hover,
+    .item-number:hover {
+        border-color: var(--tertiary-text-color);
     }
     .item-number button {
         color: var(--secondary-text-color);
