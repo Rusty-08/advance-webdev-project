@@ -123,21 +123,6 @@ let itemProperties = [
     options: ["flex-shrink-0", "flex-shrink-1"],
     isSelected: ref(false),
   },
-  {
-    model: ref(""),
-    name: "Order",
-    options: [
-      "order-first",
-      "order-last",
-      "order-0",
-      "order-1",
-      "order-2",
-      "order-3",
-      "order-4",
-      "order-5",
-    ],
-    isSelected: ref(false),
-  },
 ];
 
 let itemArr = ref([]);
@@ -166,7 +151,11 @@ const getClasses = (elements) => {
 
   isSelectedItems.map((e) => (e.isSelected.value = true));
 
-  return isSelectedItems.map((e) => e.model.value).join(" ");
+  let generatedClasses = isSelectedItems.map((e) => e.model.value).join(" ");
+
+  console.log(generatedClasses);
+
+  return `d-flex ${generatedClasses}`;
 };
 
 // update the value of each container model/properties when changed
@@ -215,6 +204,9 @@ const convertClassesToObject = (cssStyles, classes) => {
         break;
       case "flex":
         key = "flex-wrap";
+        break;
+      case "d":
+        key = "display";
         break;
       default:
         break;
@@ -303,10 +295,10 @@ displayItems();
     tabindex="0"
   >
     <div
-      class="container-fluid px-4 d-flex align-items-center justify-content-center"
+      class="container-fluid px-4 py-3 h-100 d-flex align-items-center justify-content-center"
     >
       <div
-        class="page-content p-4 shadow-sm gap-3 card flex-row d-flex justify-content-center align-items-center"
+        class="page-content h-100 p-4 shadow-sm gap-3 card flex-row d-flex justify-content-center align-items-center"
       >
         <div class="properties p-4 d-flex flex-column align-self-stretch card">
           <h2 class="fs-6 fw-semibold border-bottom pb-2">
@@ -416,9 +408,9 @@ displayItems();
         <div
           class="container-preview p-4 gap-2 d-flex flex-column justify-content-center align-self-stretch"
         >
-          <div class="container-header mb-1 d-flex justify-content-end">
-            <ul class="nav nav-pills" id="pills-tab" role="tablist">
-              <li class="nav-item" role="presentation">
+          <div class="container-header w-100 mb-3 d-flex justify-content-end">
+            <ul class="nav w-100 nav-pills" id="pills-tab" role="tablist">
+              <li class="w-50 nav-item" role="presentation">
                 <button
                   class="nav-link rounded-start-pill active"
                   id="visual"
@@ -432,7 +424,7 @@ displayItems();
                   Visual
                 </button>
               </li>
-              <li class="nav-item" role="presentation">
+              <li class="nav-item w-50" role="presentation">
                 <button
                   class="nav-link rounded-end-pill"
                   id="code"
@@ -468,8 +460,8 @@ displayItems();
                     v-for="item in itemArr"
                     class="item-card d-flex fw-semibold fs-7 text-light"
                     :class="itemClasses"
-                  >
-                    {{ item }}
+                    :key= "item"
+                    >
                   </div>
                 </div>
               </div>
@@ -570,12 +562,6 @@ displayItems();
 </template>
 
 <style setup>
-#interactive-visualizer .container-fluid {
-  min-height: 100vh !important;
-}
-#interactive-visualizer .page-content {
-  min-height: 95vh !important;
-}
 .properties {
   flex: 1;
   border-radius: 0;
@@ -590,12 +576,13 @@ displayItems();
   color: var(--sidebar-background-color) !important;
   border: 1px solid var(--sidebar-background-color) !important;
   font-weight: 400 !important;
+  padding: 0.4rem 0 !important;
 }
-#visual {
-  padding: 0.3rem 1rem 0.3rem 1.2rem !important;
+#visual,
+#code {
+  width: 100%;
 }
 #code {
-  padding: 0.3rem 1.2rem 0.3rem 1rem !important;
   border-left-color: transparent !important;
 }
 .container-header .nav-link.active {
